@@ -13,7 +13,7 @@ public class FishLeft : MonoBehaviour
     [SerializeField] float shell_x_offset = 0f;
     [SerializeField] float shell_y_offset = 0f;
 
-    [SerializeField] float MaxRotationSpeed = 20f;
+    //[SerializeField] float MaxRotationSpeed = 20f;
 
     void Start()
     {
@@ -47,9 +47,9 @@ public class FishLeft : MonoBehaviour
             transform.position = new Vector3(transform.position.x, Ymin, transform.position.z);
 
 
-        float rotation;
-        rotation = MaxRotationSpeed * Time.deltaTime * transform.position.z;
-        transform.Rotate(0f, 0f, rotation);
+       // float rotation;
+       // rotation = MaxRotationSpeed * Time.deltaTime * transform.position.z;
+       // transform.Rotate(0f, 0f, rotation);
 
         // instantiate shell on Fire2 button press (custom mapping if needed)
         //if (Input.GetButtonDown("Fire2")) // Ensure "Fire2" is mapped to a different key/button
