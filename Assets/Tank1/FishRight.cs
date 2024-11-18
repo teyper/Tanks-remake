@@ -46,7 +46,7 @@ public class FishRight : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             GameObject obj = Instantiate(ShellPrefab);
-
+            Debug.Log("hi");
             obj.transform.position = transform.position + new Vector3(shell_x_offset, shell_y_offset, 0f);
         }
     }

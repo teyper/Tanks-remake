@@ -13,14 +13,27 @@ public class FishLeft : MonoBehaviour
     [SerializeField] float shell_x_offset = 0f;
     [SerializeField] float shell_y_offset = 0f;
 
+    //SHELL HIT
+    bool hit;
+    GameObject shell;
+    //GM
+    GameManager gameManager;
+
+    //sound
+    [SerializeField] AudioClip hit1;
+    [SerializeField] AudioClip shoot1;
+    AudioSource audioSource;
+
+
+    //explpsion ani
+    Animator animator;
     //[SerializeField] float MaxRotationSpeed = 20f;
 
     void Start()
     {
-        // set a static initial position for Player 2 to avoid random relocation
-        //
-        //
-        //transform.position = new Vector3(-7f, 0f, 0f);
+        shell = GameObject.FindWithTag("shell1");
+        hit = true;
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -47,18 +60,30 @@ public class FishLeft : MonoBehaviour
             transform.position = new Vector3(transform.position.x, Ymin, transform.position.z);
 
 
-       // float rotation;
-       // rotation = MaxRotationSpeed * Time.deltaTime * transform.position.z;
-       // transform.Rotate(0f, 0f, rotation);
-
-        // instantiate shell on Fire2 button press (custom mapping if needed)
-        //if (Input.GetButtonDown("Fire2")) // Ensure "Fire2" is mapped to a different key/button
-
+       
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("hi");
             GameObject obj = Instantiate(ShellPrefab);
             obj.transform.position = transform.position + new Vector3(shell_x_offset, shell_y_offset, 0f);
         }
-    }
+        /* void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "shell2")
+            {
+                if (hit == true) return;
+
+                shell = collision.gameObject;
+                hit = true;
+                gameManager.HitByShell2();
+            }
+        if(collision.gameObject.tag== "player2")
+            {
+                animator.SetBool("explode", true);
+                Destroy(gameObject, 1f);
+                audioSource = GetComponent<AudioSource>();
+                audioSource.Play();
+            }
+    }*/
+}
 }
