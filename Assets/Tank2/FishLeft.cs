@@ -5,11 +5,11 @@ using UnityEngine;
 public class FishLeft : MonoBehaviour
 {
     [SerializeField] float RotationSpeed = 2f;
-    [SerializeField] float TranslationSpeed;`
+    [SerializeField] float TranslationSpeed;
     [SerializeField] float Ymin = -5f; // lower boundary 
     [SerializeField] float Ymax = 5f; // upper boundary
-    [SerializeField] float Xmin = -5f; // left boundary
-    [SerializeField] float Xmax = 5f; // right boundary
+    [SerializeField] float Xmin = -8f; // left boundary
+    [SerializeField] float Xmax = 8f; // right boundary
     [SerializeField] GameObject ShellPrefab;
     [SerializeField] float shell_x_offset = 0f;
     [SerializeField] float shell_y_offset = 0f;
@@ -46,20 +46,36 @@ public class FishLeft : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) 
         {
             transform.Rotate(0f, 0f, 0.8f);
-            transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+            transform.Translate(Vector3.forward * TranslationSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.D)) 
         {
             transform.Rotate(0f, 0f, -0.8f);
-            transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+            transform.Translate(Vector3.forward * RotationSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.W)) 
         {
-            transform.Translate(Speed * Time.deltaTime, 0f, 0f);
+            transform.Translate(RotationSpeed * Time.deltaTime, 0f, 0f);
             //transform.Translate(Vector3.forward * Speed * Time.deltaTime);
         }
-
+        if(Input.GetKey(KeyCode.S))
+        {
+            transform.Translate(TranslationSpeed * Time.deltaTime,0f,0f);
+            transform.Translate(Vector3.back * RotationSpeed * Time.deltaTime);
         
+    }
+        //boundary checks
+        if (transform.position.x > Xmax)
+            transform.position = new Vector3(Xmax, transform.position.y, transform.position.z);
+        if (transform.position.x < Xmin)
+            transform.position = new Vector3(Xmin, transform.position.y, transform.position.z);
+        if (transform.position.y > Ymax)
+            transform.position = new Vector3(transform.position.x, Ymax, transform.position.z);
+        if (transform.position.y < Ymin)
+            transform.position = new Vector3(transform.position.x, Ymin, transform.position.z);
+
+
+
 
 
         if (Input.GetKeyDown(KeyCode.Space))

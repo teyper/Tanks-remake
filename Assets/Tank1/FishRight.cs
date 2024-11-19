@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FishRight : MonoBehaviour
 {
-    [SerializeField] float Speed = 2f;
+    [SerializeField] float TranslationSpeed = 2f;
+    [SerializeField] float RotationSpeed = 2f;
     [SerializeField] float Ymin = -5f; // lower boundary 
     [SerializeField] float Ymax = 5f; // upper boundary
     [SerializeField] float Xmin = -5f; // left boundary
@@ -13,24 +14,35 @@ public class FishRight : MonoBehaviour
     [SerializeField] float shell_x_offset = 0f;
     [SerializeField] float shell_y_offset = 0f;
 
+    GameManager gameManager;
+
     void Start()
     {
         // Set a static initial position for Player 1 to avoid random relocation
+        gameManager = FindObjectOfType<GameManager>();
         transform.position = new Vector3(7f, 0f, 0f);
     }
 
     void Update()
     {
-        float x = 0f;
-        float y = 0f;
-
+        
         // Control movement using only Arrow keys for Player 1
-        if (Input.GetKey(KeyCode.LeftArrow)) x = -1f;
-        if (Input.GetKey(KeyCode.RightArrow)) x = 1f;
-        if (Input.GetKey(KeyCode.UpArrow)) y = 1f;
-        if (Input.GetKey(KeyCode.DownArrow)) y = -1f;
+        if (Input.GetKey(KeyCode.LeftArrow)) 
+        {
+            transform.Rotate(0f, 0f, 0.8f);
+            transform.Translate(Vector3.forward * TranslationSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Rotate(0f, 0f, -0.8f);
+            transform.Translate(Vector3.forward * RotationSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.Translate(RotationSpeed * Time.deltaTime, 0f, 0f);
+        }
 
-        transform.Translate(x * Speed * Time.deltaTime, y * Speed * Time.deltaTime, 0f);
+        //transform.Translate(x * Speed * Time.deltaTime, y * Speed * Time.deltaTime, 0f);
 
         // Boundary checks for Player 1
         if (transform.position.x > Xmax)
