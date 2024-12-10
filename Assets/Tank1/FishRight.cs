@@ -20,7 +20,7 @@ public class FishRight : MonoBehaviour
     {
         // Set a static initial position for Player 1 to avoid random relocation
         gameManager = FindObjectOfType<GameManager>();
-        transform.position = new Vector3(7f, 0f, 0f);
+        //transform.position = new Vector3(7f, 0f, 0f);
     }
 
     void Update()
@@ -29,19 +29,22 @@ public class FishRight : MonoBehaviour
         // Control movement using only Arrow keys for Player 1
         if (Input.GetKey(KeyCode.LeftArrow)) 
         {
-            transform.Rotate(0f, 0f, 0.8f);
+            transform.Rotate(0f, 0f, -0.8f);
             transform.Translate(Vector3.forward * TranslationSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            transform.Rotate(0f, 0f, -0.8f);
+            transform.Rotate(0f, 0f, 0.8f);
             transform.Translate(Vector3.forward * RotationSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
+            transform.Translate(-RotationSpeed * Time.deltaTime, 0f, 0f);
+        }
+        if(Input.GetKey(KeyCode.DownArrow))
+        {
             transform.Translate(RotationSpeed * Time.deltaTime, 0f, 0f);
         }
-
         //transform.Translate(x * Speed * Time.deltaTime, y * Speed * Time.deltaTime, 0f);
 
         // Boundary checks for Player 1

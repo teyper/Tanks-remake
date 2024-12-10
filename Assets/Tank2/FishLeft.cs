@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class FishLeft : MonoBehaviour
 {
-    [SerializeField] float RotationSpeed = 2f;
-    [SerializeField] float TranslationSpeed;
+    [SerializeField] float RotationSpeed = 1.5f;
+    [SerializeField] float TranslationSpeed = 2f;
     [SerializeField] float Ymin = -5f; // lower boundary 
     [SerializeField] float Ymax = 5f; // upper boundary
     [SerializeField] float Xmin = -8f; // left boundary
@@ -60,10 +60,10 @@ public class FishLeft : MonoBehaviour
         }
         if(Input.GetKey(KeyCode.S))
         {
-            transform.Translate(TranslationSpeed * Time.deltaTime,0f,0f);
-            transform.Translate(Vector3.back * RotationSpeed * Time.deltaTime);
+            transform.Translate(-RotationSpeed * Time.deltaTime, 0f, 0f);
+        }
+      
         
-    }
         //boundary checks
         if (transform.position.x > Xmax)
             transform.position = new Vector3(Xmax, transform.position.y, transform.position.z);
@@ -83,6 +83,8 @@ public class FishLeft : MonoBehaviour
             Debug.Log("hi");
             GameObject obj = Instantiate(ShellPrefab);
             obj.transform.position = transform.position + new Vector3(shell_x_offset, shell_y_offset, 0f);
+            obj.transform.rotation = transform.rotation;
+            obj.transform.Translate(obj.transform.right);
         }
 
     }
