@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - shell
+  - fishy
+  - shell1
+  - shell 2
   layers:
   - Default
   - TransparentFX

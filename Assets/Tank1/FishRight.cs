@@ -15,19 +15,30 @@ public class FishRight : MonoBehaviour
     [SerializeField] float shell_y_offset = 0f;
 
     GameManager gameManager;
+    Animator animator;
+    AudioSource audiosource;
+    GameObject fishy;
+
+    bool Xplode;
+
+
+    [SerializeField] AudioClip explosion;
 
     void Start()
     {
         // Set a static initial position for Player 1 to avoid random relocation
         gameManager = FindObjectOfType<GameManager>();
-        //transform.position = new Vector3(7f, 0f, 0f);
+        fishy = GameObject.FindWithTag("fish");
+        Xplode = true; //assume fishyR is hit 
+        animator = GetComponent<Animator>();
+
     }
 
     void Update()
     {
-        
+
         // Control movement using only Arrow keys for Player 1
-        if (Input.GetKey(KeyCode.LeftArrow)) 
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Rotate(0f, 0f, -0.8f);
             transform.Translate(Vector3.forward * TranslationSpeed * Time.deltaTime);
@@ -41,7 +52,7 @@ public class FishRight : MonoBehaviour
         {
             transform.Translate(-RotationSpeed * Time.deltaTime, 0f, 0f);
         }
-        if(Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
             transform.Translate(RotationSpeed * Time.deltaTime, 0f, 0f);
         }
@@ -63,6 +74,23 @@ public class FishRight : MonoBehaviour
             GameObject obj = Instantiate(ShellPrefab);
             Debug.Log("hi");
             obj.transform.position = transform.position + new Vector3(shell_x_offset, shell_y_offset, 0f);
+        }
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+
+    {
+
+        if (collision.gameObject.tag == "shell")
+        {
+            if (Xplode == true) //only happens if youre hit
+            {
+                animator.SetBool("explode", true);
+                Destroy(gameObject, 1f);
+                //audioSource = GetComponent<AudioSource>();
+                //audioSource.Play();
+            }
         }
     }
 }
