@@ -6,12 +6,15 @@ public class shellRight : MonoBehaviour
 {
     [SerializeField] float Speed = 4f;
     [SerializeField] float LifeTime = 2f;
-
+    Rigidbody2D Shellrb;
     GameManager gMan;
+
     // Start is called before the first frame update
     void Start()
     {
         Destroy(gameObject, LifeTime);
+        Shellrb = GetComponent<Rigidbody2D>();
+        gMan = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     
