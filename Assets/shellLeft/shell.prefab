@@ -135,7 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15ae1efe48ba64c609b26b60ba26d170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
   LifeTime: 3
 --- !u!50 &5227772943499164805
 Rigidbody2D:
@@ -173,8 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3739647160013033866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aadfefc24f64e497e985bcccf027c0fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ae1efe48ba64c609b26b60ba26d170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 4
-  LifeTime: 5
+  LifeTime: 3

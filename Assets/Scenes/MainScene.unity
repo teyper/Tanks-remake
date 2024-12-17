@@ -1485,7 +1485,7 @@ MonoBehaviour:
   Xmax: -1
   ShellPrefab: {fileID: 3739647160013033866, guid: fb90cb1d1ed934654b8201a3b55e5e18, type: 3}
   shell_x_offset: 1
-  shellLifetime: 4
+  shellLifetime: 3
   shootPop: {fileID: 8300000, guid: 8c75d4d8ae068416ba379a75094c6777, type: 3}
   xplodeSound: {fileID: 8300000, guid: af39a9f8eced04a2688fab8db941ea17, type: 3}
 --- !u!1 &1526092551
