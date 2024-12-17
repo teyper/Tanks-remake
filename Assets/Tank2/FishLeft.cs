@@ -24,6 +24,12 @@ public class FishLeft : MonoBehaviour
     GameManager gMan;
     Animator animator;
     AudioSource audi;
+    [SerializeField] private AudioClip shootPop; // Drag the shooting sound effect here
+    private AudioSource audioSource;
+
+    [SerializeField] private AudioClip xplodeSound; // Drag the explosion sound effect here
+    private AudioSource audioS;
+
     int Score;
 
 
@@ -40,6 +46,19 @@ public class FishLeft : MonoBehaviour
 
             Debug.LogError("GameManager not found! Make sure GameManager is active in the scene.");
         }
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        
+        
+            audioS = GetComponent<AudioSource>();
+            if (audioS == null)
+            {
+                audioS = gameObject.AddComponent<AudioSource>();
+            }
+        
 
     }
 
@@ -88,9 +107,11 @@ public class FishLeft : MonoBehaviour
         void FishShooting()
         {
             // Shoot shell when space key is pressed
-            //if (Input.GetKeyDown(KeyCode.Space))
+            if (shootPop != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(shootPop);
+            }
 
-            //                float angle = rb.rotation * Mathf.Deg2Rad;
             Debug.Log("Shell fired!");
 
 
@@ -111,6 +132,8 @@ public class FishLeft : MonoBehaviour
 
 
 
+
+
         }
 
         void KeepInBounds()
@@ -125,19 +148,34 @@ public class FishLeft : MonoBehaviour
     // private void OnCollisionEnter2D(Collision2D collision)
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("shell"))
+        if (gMan.gameOver) return; // Stop processing if game over
+
+        if (collision.gameObject.CompareTag("shell")) // Player 1 hit by its own shell
         {
             Debug.Log("Player 1 hit itself!");
             animator.SetBool("explode", true);
-            gMan.UpdateScore(true, -10, 0); // Player 1 loses 10 points, no bonus for Player 2
+            if (xplodeSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(xplodeSound);
+            }
+
+            gMan.UpdateScore(true, -10); // Player 1 loses 10 points
         }
-        else if (collision.gameObject.CompareTag("shell 2"))
+        else if (collision.gameObject.CompareTag("shell2")) // Player 2 hit Player 1
         {
             Debug.Log("Player 1 hit by Player 2!");
             animator.SetBool("explode", true);
-            gMan.UpdateScore(true, -10, 10); // Player 1 loses 10 points, Player 2 gains 10 points
+            if (xplodeSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(xplodeSound);
+            }
+
+            gMan.UpdateScore(true, -10); // Player 1 loses 10 points
+            gMan.UpdateScore(false, 20); // Player 2 gains 20 points
         }
     }
+
+
 
     private void OnCollisionExit2D(Collision2D collision)
         {

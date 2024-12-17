@@ -18,21 +18,30 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
     }
 
-    public void UpdateScore(bool isPlayer1, int selfPenalty, int opponentBonus)
+    // UpdateScore with 2 arguments (as used in FishLeft and FishRight)
+    public void UpdateScore(bool isPlayer1, int points)
     {
         if (gameOver) return; // Prevent score updates after game over
 
         if (isPlayer1)
         {
-            // Player 1 hit something
-            player1Score += selfPenalty;       // Player 1 loses points (if hit itself or got hit)
-            player2Score += opponentBonus;     // Player 2 gains points if it successfully hit Player 1
+            // Player 1 score update
+            player1Score += points;
+
+            if (points > 0) // If Player 1 gained points, Player 2 loses points
+            {
+                player2Score -= points; // Deduct the same amount from Player 2
+            }
         }
         else
         {
-            // Player 2 hit something
-            player2Score += selfPenalty;       // Player 2 loses points (if hit itself or got hit)
-            player1Score += opponentBonus;     // Player 1 gains points if it successfully hit Player 2
+            // Player 2 score update
+            player2Score += points;
+
+            if (points > 0) // If Player 2 gained points, Player 1 loses points
+            {
+                player1Score -= points; // Deduct the same amount from Player 1
+            }
         }
 
         CheckGameOver(); // Check game over condition
@@ -47,11 +56,18 @@ public class GameManager : MonoBehaviour
 
     void CheckGameOver()
     {
-        if (player1Score >= 50 || player2Score >= 50)
+        if (player1Score >= 100 || player2Score >= 100 || player1Score <= -100 || player2Score <= -100)
         {
             gameOver = true;
             Msg.text = "Game Over!";
             Debug.Log("Game Over!");
+            Invoke("ReloadSplashScreen", 1f); // Return to splash screen after 3 seconds
         }
     }
+
+    void ReloadSplashScreen()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Splasher");
+    }
 }
+

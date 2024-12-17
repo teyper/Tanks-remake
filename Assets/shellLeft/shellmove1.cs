@@ -31,7 +31,7 @@ public class shellmove : MonoBehaviour
             Destroy(gameObject);
            
         }
-        if (collision.gameObject.tag == "fishy 2")
+        if (collision.gameObject.tag == "fishy2")
         {
             //gMan.UpdateScoreUI();
             Destroy(gameObject);
