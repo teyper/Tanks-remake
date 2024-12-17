@@ -17,18 +17,33 @@ public class shellRight : MonoBehaviour
         gMan = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
-    
+
     private void OnTriggerEnter2D(Collider2D collision) //destroy on collision
     {
         if (collision.gameObject.tag == "fishy")
         {
-            gMan.HitByShell1();
-            Destroy(gameObject);
-        }
-        if (collision.gameObject.tag == "fishy2")
-        {
-            gMan.HitByShell2();
-            Destroy(gameObject);
+            //Man.HitByShell1();
+            if (gMan != null) // Ensure gameManager exists
+            {
+               // gMan.Score += 10; // Increment score by 10
+
+                Debug.Log("Score Incremented!");
+            }
+            else
+            {
+                Debug.LogError("GameManager reference is null.");
+            }
+           // if (gMan.Score >= 50)
+            {
+                //SendMessage.text = "Game Over!";
+                gMan.gameOver = true;
+                Destroy(gameObject);
+            }
+            if (collision.gameObject.tag == "fishy2")
+            {
+                //gMan.HitByShell2();
+                Destroy(gameObject);
+            }
         }
     }
 }

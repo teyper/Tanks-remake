@@ -118,23 +118,21 @@ public class FishRight : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "shell")
+        if (collision.gameObject.CompareTag("shell2"))
         {
+            Debug.Log("Player 2 hit itself!");
             animator.SetBool("explode", true);
-            animator.Play("explode", 0, 0f);
-            //animator.SetBool("fishSwim", false);
-
-
+            gMan.UpdateScore(false, -10, 0); // Player 2 loses 10 points, no bonus for Player 1
         }
-
-        if (collision.gameObject.tag == "shell2")
+        else if (collision.gameObject.CompareTag("shell"))
         {
+            Debug.Log("Player 2 hit by Player 1!");
             animator.SetBool("explode", true);
-            animator.Play("explode", 0, 0f);
-            // animator.SetBool("fishSwim", false);
-            Destroy(ShellPrefab, 3f);
+            gMan.UpdateScore(false, -10, 10); // Player 2 loses 10 points, Player 1 gains 10 points
         }
     }
+
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         StartCoroutine(ResetAnimation());

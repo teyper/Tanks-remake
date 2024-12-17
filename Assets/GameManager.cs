@@ -1,64 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    //[SerializeField] TMP_Text timer;
     [SerializeField] TMP_Text Msg;
     [SerializeField] TMP_Text ScoreText1;
     [SerializeField] TMP_Text ScoreText2;
 
-
-    public int Score = 0;
-
-    public void HitByShell1()
-    {
-        Score += 10;
-       
-    }
-
-    public void HitByShell2()
-    {
-        Score += 10;
-
-    }
-
-
-
+    public int player1Score = 0;
+    public int player2Score = 0;
     public bool gameOver = false;
-    // Start is called before the first frame update
+
     void Start()
     {
-
         gameOver = false;
-        //timer.text = "hELLO";
         Msg.text = "";
-        Score = 0;
+        UpdateScoreUI();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateScore(bool isPlayer1, int selfPenalty, int opponentBonus)
     {
-        if (gameOver == true)
+        if (gameOver) return; // Prevent score updates after game over
+
+        if (isPlayer1)
         {
-            return;
+            // Player 1 hit something
+            player1Score += selfPenalty;       // Player 1 loses points (if hit itself or got hit)
+            player2Score += opponentBonus;     // Player 2 gains points if it successfully hit Player 1
         }
-        ScoreText1.text = "Score:" + Score.ToString();
-        ScoreText2.text = "Score:" + Score.ToString();
-        
-        if (Score >= 50)
+        else
         {
-            //SendMessage.text = "Game Over!";
+            // Player 2 hit something
+            player2Score += selfPenalty;       // Player 2 loses points (if hit itself or got hit)
+            player1Score += opponentBonus;     // Player 1 gains points if it successfully hit Player 2
+        }
+
+        CheckGameOver(); // Check game over condition
+        UpdateScoreUI();
+    }
+
+    void UpdateScoreUI()
+    {
+        ScoreText1.text = "Player 1: " + player1Score;
+        ScoreText2.text = "Player 2: " + player2Score;
+    }
+
+    void CheckGameOver()
+    {
+        if (player1Score >= 50 || player2Score >= 50)
+        {
             gameOver = true;
             Msg.text = "Game Over!";
+            Debug.Log("Game Over!");
         }
-
-        
-
     }
-
-    
 }
-

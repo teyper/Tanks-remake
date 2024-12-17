@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class shellmove : MonoBehaviour
 {
-    [SerializeField] float Speed = 4f;
+//    [SerializeField] float Speed = 4f;
     [SerializeField] float LifeTime = 3f;
      Rigidbody2D Shellrb;
     GameManager gMan;
@@ -18,7 +18,7 @@ public class shellmove : MonoBehaviour
        Shellrb = GetComponent<Rigidbody2D>();
        gMan = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
 
-        //Shellrb.velocity = Speed * transform.forward;
+        
     }
 
 
@@ -27,12 +27,13 @@ public class shellmove : MonoBehaviour
         
         if(collision.gameObject.tag == "fishy")
         {
-            gMan.HitByShell1();
+            //gMan.HitByShell1();
             Destroy(gameObject);
+           
         }
-        if (collision.gameObject.tag == "fishy2")
+        if (collision.gameObject.tag == "fishy 2")
         {
-            gMan.HitByShell2();
+            //gMan.UpdateScoreUI();
             Destroy(gameObject);
         }
     }
