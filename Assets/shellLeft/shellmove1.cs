@@ -6,26 +6,34 @@ public class shellmove : MonoBehaviour
 {
     [SerializeField] float Speed = 4f;
     [SerializeField] float LifeTime = 3f;
-    Rigidbody2D rigidbody2d;
+     Rigidbody2D Shellrb;
+    GameManager gMan;
+    
+
+
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, LifeTime);
-        rigidbody2d = GetComponent<Rigidbody2D>();
-        //rigidbody2d.velocity = Speed * transform.forward;
+      Destroy(gameObject, LifeTime);
+       Shellrb = GetComponent<Rigidbody2D>();
+       gMan = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+
+        //Shellrb.velocity = Speed * transform.forward;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void OnCollisionEnter2D(Collision2D collision) //destroy on collision
     {
-
-        transform.Translate(Speed * Time.deltaTime * transform.right, Space.World);
-        //Debug.Log("heyy");
-
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision) //destroy on collision
-    {
-        Destroy(gameObject);
+        
+        if(collision.gameObject.tag == "fishy")
+        {
+            gMan.HitByShell1();
+            Destroy(gameObject);
+        }
+        if (collision.gameObject.tag == "fishy2")
+        {
+            gMan.HitByShell2();
+            Destroy(gameObject);
+        }
     }
 }

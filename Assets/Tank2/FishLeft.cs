@@ -6,65 +6,67 @@ public class FishLeft : MonoBehaviour
 {
     [SerializeField] float RotationSpeed = 1.5f;
     [SerializeField] float TranslationSpeed = 2f;
-    [SerializeField] float Ymin = -5f; // lower boundary 
-    [SerializeField] float Ymax = 5f; // upper boundary
-    [SerializeField] float Xmin = -8f; // left boundary
-    [SerializeField] float Xmax = 8f; // right boundary
+    [SerializeField] float shellSpeed = 5f;
+
+  // public GameObject shellPrefab;
+
+    [SerializeField] float Ymin = -5f;
+    [SerializeField] float Ymax = 5f;
+    [SerializeField] float Xmin = -8f;
+    [SerializeField] float Xmax = 8f;
+
     [SerializeField] GameObject ShellPrefab;
-    [SerializeField] float shell_x_offset = 0f;
-    [SerializeField] float shell_y_offset = 0f;
 
-    //SHELL HIT
-    bool hit;
-    GameObject shell;
-    //GM
-    GameManager gameManager;
+    [SerializeField] float shell_x_offset = 0.5f; // Offset for bullet spawn
+    [SerializeField] float shellLifetime = 2f;    // Time before shell gets destroyed
 
-    //sound
-    [SerializeField] AudioClip hit1;
-    [SerializeField] AudioClip shoot1;
-    AudioSource audioSource;
-
-
-    //explpsion ani
+    Rigidbody2D rb;
+    GameManager gMan;
     Animator animator;
-    //[SerializeField] float MaxRotationSpeed = 20f;
+    AudioSource audi;
+
+
+
 
     void Start()
     {
-        shell = GameObject.FindWithTag("shell1");
-        hit = true;
-        gameManager = FindObjectOfType<GameManager>();
+        // Set a static initial position for Player 1 to avoid random relocation
+        gMan = FindObjectOfType<GameManager>();
+        animator = GetComponent<Animator>();
+        audi = GetComponent<AudioSource>();
+
     }
 
     void Update()
     {
-        //float x = 0f;
-        //float y = 0f;
-
-        // control movement using only WASD keys for Player 2
-        if (Input.GetKey(KeyCode.A)) 
-        {
-            transform.Rotate(0f, 0f, 0.8f);
-            transform.Translate(Vector3.forward * TranslationSpeed * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.Space))
+            { FishShooting();
         }
-        if (Input.GetKey(KeyCode.D)) 
+        KeepInBounds();
+       
+
+        // Control movement using only Arrow keys for Player 1
+        if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(0f, 0f, -0.8f);
+            transform.Translate(Vector3.forward * TranslationSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.Rotate(0f, 0f, 0.8f);
             transform.Translate(Vector3.forward * RotationSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.W)) 
-        {
-            transform.Translate(RotationSpeed * Time.deltaTime, 0f, 0f);
-            //transform.Translate(Vector3.forward * Speed * Time.deltaTime);
-        }
-        if(Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
         {
             transform.Translate(-RotationSpeed * Time.deltaTime, 0f, 0f);
         }
-      
-        
-        //boundary checks
+        if (Input.GetKey(KeyCode.W))
+        {
+            transform.Translate(RotationSpeed * Time.deltaTime, 0f, 0f);
+        }
+        //transform.Translate(x * Speed * Time.deltaTime, y * Speed * Time.deltaTime, 0f);
+
+        // Boundary checks for Player 1
         if (transform.position.x > Xmax)
             transform.position = new Vector3(Xmax, transform.position.y, transform.position.z);
         if (transform.position.x < Xmin)
@@ -74,38 +76,78 @@ public class FishLeft : MonoBehaviour
         if (transform.position.y < Ymin)
             transform.position = new Vector3(transform.position.x, Ymin, transform.position.z);
 
+       
 
-
-
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        void FishShooting()
         {
-            Debug.Log("hi");
-            GameObject obj = Instantiate(ShellPrefab);
-            obj.transform.position = transform.position + new Vector3(shell_x_offset, shell_y_offset, 0f);
-            obj.transform.rotation = transform.rotation;
-            obj.transform.Translate(obj.transform.right);
+            // Shoot shell when space key is pressed
+            //if (Input.GetKeyDown(KeyCode.Space))
+            
+//                float angle = rb.rotation * Mathf.Deg2Rad;
+                Debug.Log("Shell fired!");
+
+
+                // Calculate spawn position offset relative to player
+                Vector3 spawnPosition = transform.position + transform.right * shell_x_offset;
+
+                // Instantiate the shell
+                GameObject shell = Instantiate(ShellPrefab, spawnPosition, transform.rotation);
+
+                // Add velocity to the shell
+                Rigidbody2D shellRb = shell.GetComponent<Rigidbody2D>();
+                
+                //shellRb.velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                // Move the shell forward
+                Debug.Log("Shell velocity set: " );
+                shellRb.AddForce(transform.right * shellSpeed);
+                
+
+               
+            
         }
 
+        void KeepInBounds()
+        {
+            // Clamp player position to stay within screen boundaries
+            float clampedX = Mathf.Clamp(transform.position.x, Xmin, Xmax);
+            float clampedY = Mathf.Clamp(transform.position.y, Ymin, Ymax);
+            transform.position = new Vector3(clampedX, clampedY, transform.position.z);
+        }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "shell2")
-        {
-            if (hit == true) return;
-
-            shell = collision.gameObject;
-            hit = true;
-            gameManager.HitByShell2();
-        }
-        if (collision.gameObject.tag == "player2")
+        if (collision.gameObject.tag == "shell")
         {
             animator.SetBool("explode", true);
-            Destroy(gameObject, 1f);
-            //shell = GetComponent<AudioSource>();
-           // audioSource.Play();
+            //animator.SetBool("fishSwim", false);
+
+
         }
 
+        if (collision.gameObject.tag == "shell2")
+        {
+            animator.SetBool("explode", true);
+           // animator.SetBool("fishSwim", false);
+            Destroy(ShellPrefab, 3f);
+        }
     }
-}
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        StartCoroutine(ResetAnimation());
+    }
+       
+        IEnumerator ResetAnimation()
+    {
+        yield return new WaitForSeconds(2f);
+            animator.SetBool("fishSwim", true);
+            animator.SetBool("explode", false);
+         
+    }
+
+
+
+       
+    }
+
+    

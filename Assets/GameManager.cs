@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text ScoreText2;
 
 
-    int Score = 0;
+    public int Score = 0;
 
     public void HitByShell1()
     {
@@ -47,9 +47,7 @@ public class GameManager : MonoBehaviour
         }
         ScoreText1.text = "Score:" + Score.ToString();
         ScoreText2.text = "Score:" + Score.ToString();
-        //float time_left = 30 - Time.time;
-        //timer.text = "Time:" + time_left.ToString("0");
-        //  Debug.Log(30 - Time.time < 0);
+        
         if (Score >= 50)
         {
             //SendMessage.text = "Game Over!";
@@ -57,6 +55,10 @@ public class GameManager : MonoBehaviour
             Msg.text = "Game Over!";
         }
 
+        
 
     }
+
+    
 }
+
